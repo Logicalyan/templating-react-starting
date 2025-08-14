@@ -104,3 +104,5 @@ export const ResetPassword: React.FC = () => {
     </form>
   );
 };
+
+export default ResetPassword;

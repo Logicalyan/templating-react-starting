@@ -79,3 +79,5 @@ export const VerifyOTP: React.FC = () => {
     </form>
   );
 };
+
+export default VerifyOTP;

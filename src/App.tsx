@@ -1,39 +1,62 @@
 // src/App.tsx
-import React, { type JSX } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
-import { Login } from './pages/Login';
-import { Home } from './pages/Home';
-import { Register } from './pages/Register';
-import { ResetPasswordRequest } from './pages/ResetPasswordRequest';
-import { VerifyOTP } from './pages/VerifyOtp';
-import { ResetPassword } from './pages/ResetPassword';
+import { routesConfig } from './routesConfig';
 
-const PrivateRoute: React.FC<{ children: JSX.Element }> = ({ children }) => {
-  const { user } = useAuth();
-  return user ? children : <Navigate to="/login" replace />;
+interface RouteGuardProps {
+  children: React.ReactNode;
+  access?: 'public' | 'publicOnly' | 'private';
+  roles?: string[];
+}
+
+const RouteGuard: React.FC<RouteGuardProps> = ({ children, access = 'public', roles: requiredRoles }) => {
+  const { token, roles: userRoles, isLoading } = useAuth();
+
+  console.log('%c[RouteGuard Debug]', 'color: orange; font-weight: bold;');
+  console.log('→ required roles:', requiredRoles);
+  console.log('→ user roles:', userRoles);
+
+  // 🚀 Wait until loading finishes to avoid false negatives
+  if (isLoading || (access === 'private' && token && userRoles.length === 0)) {
+    return <div>Loading...</div>;
+  }
+
+  if (access === 'private' && !token) {
+    return <Navigate to="/login" replace />;
+  }
+  if (access === 'public' && token) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (requiredRoles?.length) {
+    const hasAccess = userRoles?.some(role => requiredRoles.includes(role));
+    console.log('→ has role access?', hasAccess);
+    if (!hasAccess) return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
 };
+
+
+
+
 
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public route */}
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/reset-password-request" element={<ResetPasswordRequest />} />
-        <Route path="/verify-otp" element={<VerifyOTP />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        {/* Private route */}
-        <Route
-          path="/"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
-        {/* Catch-all redirect to home or login */}
+        {routesConfig.map(({ path, component: Component, access, roles }) => (
+          <Route
+            key={path}
+            path={path}
+            element={
+              <RouteGuard access={access} roles={roles}>
+                <Component />
+              </RouteGuard>
+            }
+          />
+        ))}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
