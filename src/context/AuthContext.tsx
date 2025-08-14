@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type { User } from '../types/user';
 import { loginUser, logoutUser, registerUser, fetchUserProfile } from '../api/auth';
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance from '../lib/axiosInstance';
 
 interface AuthContextType {
   user: User | null;

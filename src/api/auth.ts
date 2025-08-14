@@ -1,5 +1,5 @@
 import type { ApiResponse, AuthResponseData } from '../types/user';
-import axiosInstance from './axiosInstance';
+import axiosInstance from '../lib/axiosInstance';
 
 // Register user
 export const registerUser = async (

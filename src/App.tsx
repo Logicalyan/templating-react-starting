@@ -39,10 +39,6 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children, access = 'public', ro
   return <>{children}</>;
 };
 
-
-
-
-
 export const App: React.FC = () => {
   return (
     <BrowserRouter>

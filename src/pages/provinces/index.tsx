@@ -2,7 +2,7 @@
 
 import { columns, type Province } from "./columns"
 import { DataTable } from "../../components/common/data-table"
-import axiosInstance from "@/api/axiosInstance"
+import axiosInstance from "@/lib/axiosInstance"
 import type { ApiResponse } from "@/types/api";
 async function getData(){
   return await axiosInstance.get<ApiResponse<Province[]>>(`/provinces`);
