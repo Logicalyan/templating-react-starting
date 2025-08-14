@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import { routesConfig } from './routesConfig';
+import NotFound from './pages/NotFound';
 
 interface RouteGuardProps {
   children: React.ReactNode;
@@ -57,7 +58,7 @@ export const App: React.FC = () => {
             }
           />
         ))}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </BrowserRouter>
   );
