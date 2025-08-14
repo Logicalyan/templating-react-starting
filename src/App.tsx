@@ -7,7 +7,7 @@ import NotFound from './pages/NotFound';
 
 interface RouteGuardProps {
   children: React.ReactNode;
-  access?: 'public' | 'publicOnly' | 'private';
+  access?: 'public' | 'private';
   roles?: string[];
 }
 

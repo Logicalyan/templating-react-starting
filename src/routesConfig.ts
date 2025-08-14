@@ -9,13 +9,12 @@ import DashboardIndex from './pages/dashboard/index';
 import ProvincePage from './pages/provinces';
 import DashboardPage from './pages/dashboard';
 
-export type UserRole = 'admin' | 'manager' | 'user';
 
 export interface AppRoute {
   path: string;
   component: React.ComponentType;
   access?: 'public' | 'private'; // default: public
-  roles?: UserRole[];
+  roles?: string[];
 }
 
 export const routesConfig: AppRoute[] = [
